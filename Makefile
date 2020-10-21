@@ -1,5 +1,12 @@
-all: asio-server asio-client
+CC := g++
+CFLAGS := -lPocoNet -lPocoUtil -lPocoXML -lPocoFoundation
+
+all: asio-server asio-client poco-server poco-client
 asio-server:
-	g++ -o asio_server asio_server.cpp -L/usr/lib/ -lpthread
+	${CC} -o asio_server asio_server.cpp -L/usr/lib/ -lpthread
 asio-client:
-	g++ -o asio_client asio_client.cpp -L/usr/lib/ -lpthread
+	${CC} -o asio_client asio_client.cpp -L/usr/lib/ -lpthread
+poco-server:
+	${CC} -o poco_server ${CFLAGS} poco_server.cpp ConnectionHandler.cpp poco_server_main.cpp
+poco-client:
+	${CC} -o poco_client poco_client.cpp -L/usr/local/lib/cmake/Poco -lPocoNet

@@ -23,8 +23,8 @@ int main(int, char **) {
   // std::thread t3([&]() { io.run(); });
   // std::thread t4([&]() { io.run(); });
 
-  // std::vector<unsigned char> buffer(131072, 0);
-  // buffer.back() = 'e';
+  std::vector<uint8_t> buffer(131072, 0);
+  buffer.back() = 'e';
 
   std::chrono::time_point<std::chrono::system_clock> last =
       std::chrono::system_clock::now();
@@ -33,14 +33,12 @@ int main(int, char **) {
 
   std::size_t bytesSent = 0;
 
-  Poco::Net::SocketBufVec sbv = Poco::Net::Socket::makeBufVec(1, 131072);
-
   while (keepGoing) {
     // blocks during send?
-    ss.sendBytes(sbv);
+    ss.sendBytes(buffer.data(), buffer.size());
 
     // accumulate bytes sent
-    bytesSent += sbv[0].iov_len;
+    bytesSent += buffer.size();
 
     // accumulate time spent sending
     delta += std::chrono::system_clock::now() - last;

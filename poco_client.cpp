@@ -45,7 +45,7 @@ int main(int, char **) {
     last = std::chrono::system_clock::now();
 
     // print information periodically
-    if (delta.count() >= 5.0) {
+    if (delta.count() >= 1.0) {
       std::printf(
           "Mbytes/sec: %f, Gbytes/sec: %f, Mbits/sec: %f, Gbits/sec: %f\n",
           bytesSent / 1.0e6 / delta.count(), bytesSent / 1.0e9 / delta.count(),

@@ -11,7 +11,8 @@ int Server::main(const std::vector<std::string>& args) {
   // set-up a SocketReactor...
   SocketReactor reactor;
   // ... and a SocketAcceptor
-  SocketAcceptor<ConnectionHandler> acceptor(svs, reactor);
+  ParallelSocketAcceptor<ConnectionHandler, SocketReactor> acceptor(svs,
+                                                                    reactor);
   // run the reactor in its own thread so that we can wait for
   // a termination request
   Thread thread;

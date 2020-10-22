@@ -1,4 +1,5 @@
 #include "ConnectionHandler.hpp"
+#include "Poco/Net/ParallelSocketAcceptor.h"
 #include "Poco/Net/ServerSocket.h"
 #include "Poco/Net/SocketAcceptor.h"
 #include "Poco/Net/SocketReactor.h"
@@ -7,6 +8,7 @@
 #include "Poco/Util/OptionSet.h"
 #include "Poco/Util/ServerApplication.h"
 
+using Poco::Net::ParallelSocketAcceptor;
 using Poco::Net::ServerSocket;
 using Poco::Net::SocketAcceptor;
 using Poco::Net::SocketReactor;

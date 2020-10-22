@@ -5,9 +5,7 @@ Server::Server() {}
 Server::~Server() {}
 
 int Server::main(const std::vector<std::string>& args) {
-  // get parameters from configuration file
   unsigned short port = (unsigned short)1234;
-
   // set-up a server socket
   ServerSocket svs(port);
   // set-up a SocketReactor...

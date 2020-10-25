@@ -2,6 +2,9 @@
 
 Profiling the performance of various C++ socket libs. Currently supporting Poco and ASIO.
 
+## Building
+Run `./build.sh`. Only Arch and Ubuntu are currently supported. Boost and Poco are assumed to be in their standard install dirs.
+
 ## Stats
 1. ASIO Server
 	- ASIO client

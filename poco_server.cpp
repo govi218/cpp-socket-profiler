@@ -17,6 +17,7 @@ int Server::main(const std::vector<std::string>& args) {
   // a termination request
   Thread thread;
   thread.start(reactor);
+
   // wait for CTRL-C or kill
   waitForTerminationRequest();
   // Stop the SocketReactor

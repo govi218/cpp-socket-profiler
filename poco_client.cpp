@@ -15,13 +15,9 @@ void shutdown(int) { keepGoing = false; }
 int main(int, char **) {
   signal(SIGINT, shutdown);
 
+  double gbps = 0, total_gbps = 0, iters = 0;
   Poco::Net::StreamSocket ss;
   ss.connect(Poco::Net::SocketAddress("127.0.0.1", "1234"));
-
-  // std::thread t1([&]() { io.run(); });
-  // std::thread t2([&]() { io.run(); });
-  // std::thread t3([&]() { io.run(); });
-  // std::thread t4([&]() { io.run(); });
 
   std::vector<uint8_t> buffer(131072, 0);
   buffer.back() = 'e';
@@ -46,17 +42,21 @@ int main(int, char **) {
 
     // print information periodically
     if (delta.count() >= 1.0) {
+      gbps = 8 * bytesSent / 1.0e9 / delta.count();
       std::printf(
-          "Mbytes/sec: %f, Gbytes/sec: %f, Mbits/sec: %f, Gbits/sec: %f\n",
+          "Mbytes/sec: %f, Gbytes/sec: %f, Mbits/sec: %f, "
+          "Gbits/sec: %f\n",
           bytesSent / 1.0e6 / delta.count(), bytesSent / 1.0e9 / delta.count(),
-          8 * bytesSent / 1.0e6 / delta.count(),
-          8 * bytesSent / 1.0e9 / delta.count());
+          8 * bytesSent / 1.0e6 / delta.count(), gbps);
 
       // reset accumulators
+      total_gbps += gbps;
+      iters++;
       bytesSent = 0;
       delta = std::chrono::seconds(0);
     }
   }
 
+  std::printf("Average thru Gbps: %f\n", total_gbps / iters);
   std::printf("client: goodbyte\n");
 }

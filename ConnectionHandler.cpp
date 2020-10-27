@@ -34,14 +34,12 @@ void ConnectionHandler::onReadable(const AutoPtr<ReadableNotification>& pNf) {
   int n = _socket.receiveBytes(&_pBuffer[0], BUFFER_SIZE);
 
   // keep reading
-  if (n > 0) {
-    this->onReadable(pNf);
-  } else {
+  if (n == 0) {
     delete this;
   }
 }
 
 void ConnectionHandler::onShutdown(const AutoPtr<ShutdownNotification>& pNf) {
-  std::cout << "Shutdown???" << std::endl;
+  std::cout << "goodbye" << std::endl;
   delete this;
 }

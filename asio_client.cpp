@@ -14,6 +14,7 @@ void shutdown(int) { keepGoing = false; }
 int main(int, char **) {
   signal(SIGINT, shutdown);
 
+  double gbps = 0, total_gbps = 0, iters = 0;
   boost::asio::io_service io;
   boost::asio::io_service::work work(io);
 
@@ -45,7 +46,6 @@ int main(int, char **) {
   while (keepGoing) {
     // blocks during send
     boost::asio::write(socket, boost::asio::buffer(buffer));
-    // socket.send(boost::asio::buffer(buffer));
 
     // accumulate bytes sent
     bytesSent += buffer.size();
@@ -53,16 +53,18 @@ int main(int, char **) {
     // accumulate time spent sending
     delta += std::chrono::system_clock::now() - last;
     last = std::chrono::system_clock::now();
+    gbps = 8 * bytesSent / 1.0e9 / delta.count();
 
     // print information periodically
     if (delta.count() >= 1.0) {
       std::printf(
           "Mbytes/sec: %f, Gbytes/sec: %f, Mbits/sec: %f, Gbits/sec: %f\n",
           bytesSent / 1.0e6 / delta.count(), bytesSent / 1.0e9 / delta.count(),
-          8 * bytesSent / 1.0e6 / delta.count(),
-          8 * bytesSent / 1.0e9 / delta.count());
+          8 * bytesSent / 1.0e6 / delta.count(), gbps);
 
       // reset accumulators
+      total_gbps += gbps;
+      iters++;
       bytesSent = 0;
       delta = std::chrono::seconds(0);
     }
@@ -75,5 +77,6 @@ int main(int, char **) {
   t3.join();
   t4.join();
 
+  std::printf("Average thru Gbps: %f\n", total_gbps / iters);
   std::printf("client: goodbyte\n");
 }
